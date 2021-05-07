@@ -1,0 +1,14 @@
+{
+  "name": "akundoproject",
+  "version": "1.0.0",
+  "description": "A Covid vaccine checker scout program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sai Rithvik Ayithapu",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
