@@ -125,12 +125,11 @@ const checkSlots = async () => {
 
       // condition checking whether the session is open for our desired age range and whether shots are available
       if(centers[i].sessions[j].min_age_limit === age && centers[i].sessions[j].available_capacity) {
-        found = 1; // set found to 1 since a center with slots is found
-        
         // Beep only once
-        if(p != 1) {
+        if(found != 1) {
           await beeper(3);  // beep! for success
         }
+        found = 1; // set found to 1 since a center with slots is found
         p = 1; // set p to 1 since this particular center has free slots
 
         // Store the date, available capacity of vaccine and the name of the vaccine in a table
@@ -159,18 +158,21 @@ const checkSlots = async () => {
 }
 
 // Asking user whether they wish to restart the process from a new location or exit
-const askUser = () => {
-  return [{
+const askUser1 = () => {
+  return {
     type: 'confirm',
     message: 'Would you like to check for another location?',
     name: 'response1'
-  },
-  {
+  }
+};
+
+const askUser2 = () => {
+  return {
     type: 'confirm',
     message: 'Would you like to exit?',
-    name: 'response2'
-  },
-]};
+    name: 'response2',
+  }
+}
 
 
 // main function
@@ -201,15 +203,16 @@ const main = async () => {
     setInterval(checkSlots, 60000);
   }
   else {
-    let runAgain = await inquirer.prompt(askUser());
-    if(runAgain.response1 === true) {
+    let runAgain1 = await inquirer.prompt(askUser1());  // Response for whether user wants to check a new location
+    if(runAgain1.response1 === true) {
       found = 0;
       main();
     }
-    if(runAgain.response1 === false && runAgain.response2 === true) {
+    let runAgain2 = await inquirer.prompt(askUser2());  // Response for whether user wants to check the same location
+    if(runAgain2.response2 === true) {
       console.log('Goodbye!! :)'); // exiting the program
     }
-    if(runAgain.response1 === false && runAgain.response2 === false) {
+    if(runAgain2.response2 === false) {
       console.log('Now the program will keep checking for slots in the same location every minute. Press CTRL + C to exit');
       setInterval(checkSlots, 60000); // keep checking the data for the same place after each minute
     }
